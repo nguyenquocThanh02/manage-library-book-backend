@@ -7,6 +7,7 @@ const bookSchema= new mongoose.Schema(
         type: {type: String, required: true},
         price: {type: Number, required: true},
         countInStock: {type: Number, required: true},
+        amountBorrowed: {type: Number, default: 0},
         author: {type: String, required: true},
         datePublish: {type: Number, required: true},
     },

@@ -10,6 +10,12 @@ class bookService{
         );
         return result.value;
     }
+    // async create(payload) {
+    //     const result = await book.create(
+    //         payload
+    //     );
+    //     return result;
+    // }
 
     async find(filter){
         const cursor = await book.find(filter);
