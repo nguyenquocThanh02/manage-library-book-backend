@@ -5,6 +5,7 @@ const orderSchema = new mongoose.Schema({
     orderBook: 
     {
         name: { type: String, required: true },
+        image: { type: String },
         price: { type: Number, required: true },
         author: { type: String, required: true },
         book: {

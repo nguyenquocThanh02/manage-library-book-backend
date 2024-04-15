@@ -28,14 +28,55 @@ class orderService{
         }
     }
 
+    async cancelOrder(orderId) {
+        try {
+            const orderToCancel = await order.findById(orderId);
+    
+            if (!orderToCancel) {
+                return {
+                    status: 'error',
+                    message: 'Không tìm thấy đơn đặt hàng.'
+                };
+            }
+    
+            await book.findByIdAndUpdate(orderToCancel.orderBook.book, {
+                $inc: {
+                    countInStock: +1,
+                    amountBorrowed: -1,
+                }},
+                {new: true}
+            );
+    
+            // Xóa đơn đặt hàng
+            await order.findByIdAndDelete(orderId);
+    
+            return {
+                status: 'success',
+                message: 'Đã hủy đơn đặt hàng thành công.'
+            };
+        } catch (error) {
+            return {
+                status: 'error',
+                message: 'Đã xảy ra lỗi khi hủy đơn đặt hàng.'
+            };
+        }
+    }
+    
+
     async findAll(){
         const cursor = await order.find();
         return await cursor;
     }
 
-    async findAllOfUser(email){
+    async findByUser(payload){
         return await order.find({
-            "orderUser.email": email
+            "orderUser.email": payload
+        });
+    }
+
+    async findById(id){
+        return await order.findOne({
+            _id: ObjectId.isValid(id) ? new ObjectId(id) : null,
         });
     }
 

@@ -15,6 +15,20 @@ exports.create = async(req, res, next) => {
     }
 };
 
+// cancel order
+exports.cancelOrder = async(req, res, next) => {
+    try{
+        const orderService = new OrderService();
+        const document = await orderService.cancelOrder(req.params.orderId);
+
+        return res.send(document);
+    }catch(error){
+        return next(
+            new ApiError(500, "An error occurred while cancelling the book")
+        );
+    }
+};
+
 // Retrieve all orders of a Order from the database
 exports.findAll = async (req, res, next) => {
     let documents = [];
@@ -35,6 +49,24 @@ exports.findAllOfUser = async (req, res, next) => {
     try{
         const orderService = new OrderService();
         const document = await orderService.findByUser(req.params.email);
+        if(!document){
+            return next(new ApiError(404, "Order not found"));
+        }
+        return res.send(document);
+    }catch(error){
+        return next(
+            new ApiError(
+                500,
+                `Error retrieving book with id = ${req.params.id}`
+            )
+        );
+    }
+};
+
+exports.findById = async (req, res, next) => {
+    try{
+        const orderService = new OrderService();
+        const document = await orderService.findById(req.params.id);
         if(!document){
             return next(new ApiError(404, "Order not found"));
         }

@@ -14,4 +14,10 @@ router.route("/")
 router.route("/:email")
     .get(orders.findAllOfUser);
 
+router.route("/cancel/:orderId")
+    .delete(orders.cancelOrder);
+
+router.route("/detail/:id")
+    .get(orders.findById);
+
 module.exports = router;
